@@ -10,7 +10,7 @@ import io
 # ===============================================================
 # CONFIGURATION
 # ===============================================================
-FASTAPI_URL = "http://127.0.0.1:8000/predict"  # your backend endpoint
+FASTAPI_URL = "https://renewal-prediction-project.onrender.com/predict" 
 
 st.set_page_config(page_title="Policy Renewal Prediction Dashboard", layout="wide")
 st.title("📊 Policy Renewal Prediction Dashboard")
