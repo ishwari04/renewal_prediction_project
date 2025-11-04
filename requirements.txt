@@ -1,0 +1,14 @@
+streamlit
+lightgbm
+xgboost
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+joblib
+shap
+fastapi
+uvicorn
+lightgbm
+python-multipart

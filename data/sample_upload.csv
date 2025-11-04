@@ -1,0 +1,6 @@
+age,gender,tenure_months,policy_type,annual_premium,late_payments,auto_debit,num_claims,total_claim_amount,interactions,avg_response_days,satisfaction,payment_consistency,claim_to_premium,engagement_score
+42,M,36,Health,18500,0,1,0,0,3,2.5,4.2,0.97,0.0,4.68
+29,F,18,Motor,12000,1,1,1,8000,4,5.0,3.5,0.92,0.67,4.1
+53,M,60,Term,35000,0,1,0,0,1,1.2,4.7,1.0,0.0,4.88
+38,F,72,Whole,27000,2,0,1,15000,2,4.3,3.2,0.95,0.55,3.92
+46,M,48,Home,31000,0,1,0,0,3,2.1,4.1,0.99,0.0,4.46
