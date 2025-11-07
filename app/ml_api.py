@@ -1,15 +1,36 @@
 # ===============================================================
-# app/ml_api.py — FastAPI Backend for Renewal Prediction
+# app/ml_api.py — FastAPI Backend for Renewal Prediction + GenAI Chat
 # ===============================================================
 
-from fastapi import FastAPI
+from dotenv import load_dotenv
+from openai import OpenAI
+import os
+
+# Load environment variables and initialize OpenAI client
+load_dotenv()
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from typing import List
 import pandas as pd
 import joblib
-import os
 
+# ===============================================================
+# Initialize FastAPI app
+# ===============================================================
 app = FastAPI(title="Policy Renewal Prediction API")
+
+# Enable CORS
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # can restrict to your Streamlit/Render URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # ===============================================================
 # Load model and preprocessor
@@ -39,10 +60,8 @@ class InputData(BaseModel):
 # ===============================================================
 @app.post("/predict")
 def predict(input_data: InputData):
-    # Convert incoming data to DataFrame
     df = pd.DataFrame(input_data.data)
 
-    # Preprocess
     if isinstance(preprocessor, dict):
         scaler = preprocessor["scaler"]
         features = preprocessor["features"]
@@ -51,8 +70,34 @@ def predict(input_data: InputData):
     else:
         X_processed = preprocessor.transform(df)
 
-    # Predict
     preds = model.predict_proba(X_processed)[:, 1]  # renewal probability
-
-    # Return predictions as JSON
     return {"predictions": preds.tolist()}
+
+# ===============================================================
+# GenAI Chat endpoint
+# ===============================================================
+@app.post("/chat")
+async def chat(request: Request):
+    data = await request.json()
+    user_input = data.get("message", "")
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a helpful AI assistant that explains customer "
+                        "policy renewal predictions clearly and simply."
+                    )
+                },
+                {"role": "user", "content": user_input}
+            ]
+        )
+
+        reply = response.choices[0].message.content
+        return JSONResponse(content={"reply": reply})
+
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
