@@ -20,7 +20,8 @@ SECONDARY_COLOR = "#006D5B"    # Rich Teal-Green
 SECONDARY_RGB = "0, 109, 91"
 FONT_FAMILY = "Inter, sans-serif"
 GEMINI_MODEL = "gemini-2.5-flash-preview-09-2025"
-API_KEY = "" # API key is handled by the environment
+API_KEY = st.secrets["api_keys"]["GEMINI_API_KEY"]
+
 
 # Set page config
 st.set_page_config(
@@ -305,10 +306,55 @@ custom_css = f"""
         opacity: 0.7;
     }}
 
+    
+
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
+custom_css += """
+/* ======= BEAUTIFUL CHAT UI BUBBLES ======= */
+.stChatMessage[data-testid="stChatMessage"] {
+    padding: 0 !important;
+}
+
+.stChatMessage[data-testid="stChatMessage"] > div {
+    border-radius: 14px !important;
+    padding: 12px 16px !important;
+    font-size: 0.95rem !important;
+    line-height: 1.45 !important;
+    backdrop-filter: blur(8px);
+}
+
+/* USER MESSAGE (You) — Purple Bubble */
+.stChatMessage[data-testid="stChatMessage"]:has(.user) > div {
+    background: rgba(106, 13, 173, 0.22) !important;
+    border: 1px solid rgba(106, 13, 173, 0.45) !important;
+    color: var(--text-color) !important;
+    align-self: flex-end !important;
+}
+
+/* ASSISTANT MESSAGE (Bot) — Green Bubble */
+.stChatMessage[data-testid="stChatMessage"]:has(.assistant) > div {
+    background: rgba(0, 109, 91, 0.22) !important;
+    border: 1px solid rgba(0, 109, 91, 0.45) !important;
+    color: var(--text-color) !important;
+    align-self: flex-start !important;
+}
+
+/* Chat input styling */
+.stChatInputContainer textarea {
+    border-radius: 10px !important;
+    border: 1px solid var(--border-color) !important;
+    background: var(--card-bg) !important;
+    color: var(--text-color) !important;
+}
+
+.stChatInputContainer textarea:focus {
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 0 2px rgba(var(--accent-rgb), 0.4) !important;
+}
+"""
 
 # ===============================================================
 # MOCK/SIMULATED DATA (Unchanged)
@@ -718,7 +764,7 @@ def chatbot_page():
     st.markdown("---")
 
     st.markdown('<div class="stContainer">', unsafe_allow_html=True)
-    st.markdown(f"**Chat with Gemini** about the Renewal Prediction Project, data insights, or renewal strategies. Powered by `{GEMINI_MODEL}`.")
+    st.markdown(f"**Chat with chatbot** about the Renewal Prediction Project, data insights, or renewal strategies.")
     st.markdown("</div>", unsafe_allow_html=True)
 
     # Display chat messages from history
