@@ -12,3 +12,4 @@ fastapi
 uvicorn
 lightgbm
 python-multipart
+plotly
