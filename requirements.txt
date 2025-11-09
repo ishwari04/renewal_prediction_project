@@ -1,6 +1,4 @@
 streamlit
-lightgbm
-xgboost
 pandas
 numpy
 scikit-learn
@@ -8,8 +6,10 @@ matplotlib
 seaborn
 joblib
 shap
+xgboost
+lightgbm
 fastapi
 uvicorn
-lightgbm
 python-multipart
 plotly
+requests
